@@ -7,7 +7,7 @@ const movieID = process.argv[2];
 const apiUrl = `https://swapi.dev/api/films/${movieID}/`;
 
 // Function to make a request to the API
-function fetchCharacters(url) {
+function fetchCharacters (url) {
   return new Promise((resolve, reject) => {
     request(url, { json: true }, (error, res, body) => {
       if (error) {
@@ -20,10 +20,10 @@ function fetchCharacters(url) {
 }
 
 // Function to fetch the character names
-async function fetchAllCharacters() {
+async function fetchAllCharacters () {
   try {
     const characterUrls = await fetchCharacters(apiUrl);
-    
+
     for (const url of characterUrls) {
       await new Promise((resolve, reject) => {
         request(url, { json: true }, (error, res, body) => {
