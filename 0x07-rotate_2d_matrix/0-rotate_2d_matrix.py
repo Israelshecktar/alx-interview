@@ -12,7 +12,7 @@ def rotate_2d_matrix(matrix):
     matrix (list of list of ints): 2D matrix to be rotated
     """
     n = len(matrix)
-    
+   
     # Transpose the matrix
     for i in range(n):
         for j in range(i, n):
