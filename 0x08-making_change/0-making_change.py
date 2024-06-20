@@ -6,14 +6,17 @@ def makeChange(coins, total):
     if total <= 0:
         return 0
 
-    # Initialize an array to store the minimum coins for each amount
-    # from 0 to total
-    min_coins = [float('inf')] * (total + 1)
-    min_coins[0] = 0  # To make 0, we need 0 coins
+    # Initialize dp array with infinity, and dp[0] = 0
+    # because 0 coins are needed for 0 total
+    dp = [float("inf")] * (total + 1)
+    dp[0] = 0
 
+    # Loop through each coin and update the dp array
     for coin in coins:
         for x in range(coin, total + 1):
-            if min_coins[x - coin] != float('inf'):
-                min_coins[x] = min(min_coins[x], min_coins[x - coin] + 1)
+            if dp[x - coin] != float("inf"):
+                dp[x] = min(dp[x], dp[x - coin] + 1)
 
-    return min_coins[total] if min_coins[total] != float('inf') else -1
+    # If dp[total] is still infinity, that means it's not possible
+    # to form that total
+    return dp[total] if dp[total] != float("inf") else -1
