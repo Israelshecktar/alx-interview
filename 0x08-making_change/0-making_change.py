@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Implementing a gready Algorithm"""
+
 
 def makeChange(coins, total):
     if total <= 0:
