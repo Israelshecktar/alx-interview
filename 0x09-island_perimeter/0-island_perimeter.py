@@ -1,31 +1,16 @@
 #!/usr/bin/python3
-""" island algorithm
-"""
+""" Island Perimeter """
 
 
 def island_perimeter(grid):
-    rows = len(grid)
-    cols = len(grid[0])
-
+    """ Function that returns the perimeter of the island """
     perimeter = 0
-
-    for i in range(rows):
-        for j in range(cols):
+    for i in range(len(grid)):
+        for j in range(len(grid[i])):
             if grid[i][j] == 1:
-                # Each land cell starts with 4 possible perimeter edges
                 perimeter += 4
-
-                # Check top neighbor
                 if i > 0 and grid[i - 1][j] == 1:
-                    perimeter -= 1
-                # Check bottom neighbor
-                if i < rows - 1 and grid[i + 1][j] == 1:
-                    perimeter -= 1
-                # Check left neighbor
+                    perimeter -= 2
                 if j > 0 and grid[i][j - 1] == 1:
-                    perimeter -= 1
-                # Check right neighbor
-                if j < cols - 1 and grid[i][j + 1] == 1:
-                    perimeter -= 1
-
+                    perimeter -= 2
     return perimeter
