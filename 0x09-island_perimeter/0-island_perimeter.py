@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+""" island algorithm
+"""
 
 
 def island_perimeter(grid):
