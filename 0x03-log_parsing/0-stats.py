@@ -1,44 +1,45 @@
 #!/usr/bin/python3
-"""script that reads stdin line by line and computes metrics"""
-
 import sys
+import signal
+import re
 
+# Global variables to hold total file size and status code counts
+total_file_size = 0
+status_code_counts = {}
 
-i = 0
-sum_file_size = 0
-status_code = {'200': 0,
-               '301': 0,
-               '400': 0,
-               '401': 0,
-               '403': 0,
-               '404': 0,
-               '405': 0,
-               '500': 0}
+# Regular expression to match the input format
+log_pattern = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3} - \[\S+ \S+\] \"GET /projects/260 HTTP/1.1\" (\d{3}) (\d+)$")
 
-try:
-    for line in sys.stdin:
-        args = line.split(' ')
-        if len(args) > 2:
-            status_line = args[-2]
-            file_size = args[-1]
-            if status_line in status_code:
-                status_code[status_line] += 1
-            sum_file_size += int(file_size)
-            i += 1
-            if i == 10:
-                print('File size: {:d}'.format(sum_file_size))
-                sorted_keys = sorted(status_code.keys())
-                for key in sorted_keys:
-                    value = status_code[key]
-                    if value != 0:
-                        print('{}: {}'.format(key, value))
-                i = 0
-except Exception:
-    pass
-finally:
-    print('File size: {:d}'.format(sum_file_size))
-    sorted_keys = sorted(status_code.keys())
-    for key in sorted_keys:
-        value = status_code[key]
-        if value != 0:
-            print('{}: {}'.format(key, value))
+# Function to print statistics
+def print_statistics():
+    global total_file_size, status_code_counts
+    print("File size: {}".format(total_file_size))
+    for code in sorted(status_code_counts.keys()):
+        print("{}: {}".format(code, status_code_counts[code]))
+
+# Signal handler for keyboard interrupt
+def signal_handler(sig, frame):
+    print_statistics()
+    sys.exit(0)
+
+# Register signal handler
+signal.signal(signal.SIGINT, signal_handler)
+
+# Read lines from stdin, process and compute metrics
+line_count = 0
+for line in sys.stdin:
+    match = log_pattern.match(line.strip())
+    if match:
+        status_code = match.group(1)
+        file_size = int(match.group(2))
+        total_file_size += file_size
+        if status_code in status_code_counts:
+            status_code_counts[status_code] += 1
+        else:
+            status_code_counts[status_code] = 1
+        line_count += 1
+        if line_count % 10 == 0:
+            print_statistics()
+
+# Print remaining statistics at the end (EOF)
+print_statistics()
