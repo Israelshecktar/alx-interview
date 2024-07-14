@@ -8,7 +8,10 @@ total_file_size = 0
 status_code_counts = {}
 
 # Regular expression to match the input format
-log_pattern = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3} - \[\S+ \S+\] \"GET /projects/260 HTTP/1.1\" (\d{3}) (\d+)$")
+log_pattern = re.compile(
+    r"^\d{1,3}(?:\.\d{1,3}){3} - \[\S+ \S+\] \"GET /projects/260 HTTP/1.1\" (\d{3}) (\d+)$"
+)
+
 
 # Function to print statistics
 def print_statistics():
@@ -17,10 +20,12 @@ def print_statistics():
     for code in sorted(status_code_counts.keys()):
         print("{}: {}".format(code, status_code_counts[code]))
 
+
 # Signal handler for keyboard interrupt
 def signal_handler(sig, frame):
     print_statistics()
     sys.exit(0)
+
 
 # Register signal handler
 signal.signal(signal.SIGINT, signal_handler)
